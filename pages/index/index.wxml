@@ -1,0 +1,260 @@
+<!--index.wxml - 长方形环绕美食选择界面-->
+
+<!-- container是整个页面的容器，包含所有界面元素 -->
+<view class="container">
+  <!-- 顶部积分区域：显示真实积分和午餐倒计时 -->
+  <view class="score-area">
+    <view class="score-container">
+      <text class="score">积分：{{currentScore}}</text>
+      <!-- 新增：积分增加特效 -->
+      <view class="score-effect" wx:if="{{showScoreEffect}}">
+        <text class="score-effect-text">{{scoreEffectText}}</text>
+      </view>
+    </view>
+    <text class="time">午餐倒计时：{{countdown}}</text>
+  </view>
+  
+  <!-- 美食长方形环绕区域：所有美食格子围成长方形，中间显示选中结果 -->
+  <view class="food-ring-container">
+    <!-- Logo区域 - 添加在顶部中间位置 -->
+    <view class="logo-area">
+      <image class="logo-image" src="/images/logo/logo.jpeg" mode="aspectFit"></image>
+    </view>
+    
+    <!-- 顶部标题区域 -->
+    <view class="main-title">
+      <text>吃啥转圈圈·ITC吃什么</text>
+    </view>
+    
+    <!-- 顶部一行美食格子（6个）索引 0-5 -->
+    <view class="food-ring-row top-ring">
+      <view class="food-cell jiangzhe {{activeIndex === 0 ? 'active' : ''}}" bindlongpress="toggleFavorite" data-index="0">
+        <text class="food-icon">🦀</text>
+        <text class="food-name">江浙菜</text>
+        <text class="multiplier">×2</text>
+        <view class="favorite-heart {{favoriteList[0] ? 'show' : ''}}" wx:if="{{favoriteList[0]}}">❤️</view>
+      </view>
+      <view class="food-cell japanese {{activeIndex === 1 ? 'active' : ''}}" bindlongpress="toggleFavorite" data-index="1">
+        <text class="food-icon">🍣</text>
+        <text class="food-name">日式料理</text>
+        <text class="multiplier">×2</text>
+        <view class="favorite-heart {{favoriteList[1] ? 'show' : ''}}" wx:if="{{favoriteList[1]}}">❤️</view>
+      </view>
+      <view class="food-cell hotpot {{activeIndex === 2 ? 'active' : ''}}" bindlongpress="toggleFavorite" data-index="2">
+        <text class="food-icon">🍲</text>
+        <text class="food-name">火锅</text>
+        <text class="multiplier">×25</text>
+        <view class="favorite-heart {{favoriteList[2] ? 'show' : ''}}" wx:if="{{favoriteList[2]}}">❤️</view>
+      </view>
+      <view class="food-cell special lucky {{activeIndex === 3 ? 'active' : ''}}" bindlongpress="toggleFavorite" data-index="3">
+        <text class="food-icon">🎰</text>
+        <text class="food-name">777幸运奖</text>
+        <text class="multiplier">×50</text>
+        <view class="favorite-heart {{favoriteList[3] ? 'show' : ''}}" wx:if="{{favoriteList[3]}}">❤️</view>
+      </view>
+      <view class="food-cell cantonese {{activeIndex === 4 ? 'active' : ''}}" bindlongpress="toggleFavorite" data-index="4">
+        <text class="food-icon">🥮</text>
+        <text class="food-name">粤菜</text>
+        <text class="multiplier">×2</text>
+        <view class="favorite-heart {{favoriteList[4] ? 'show' : ''}}" wx:if="{{favoriteList[4]}}">❤️</view>
+      </view>
+      <view class="food-cell korean {{activeIndex === 5 ? 'active' : ''}}" bindlongpress="toggleFavorite" data-index="5">
+        <text class="food-icon">🥘</text>
+        <text class="food-name">韩式料理</text>
+        <text class="multiplier">×2</text>
+        <view class="favorite-heart {{favoriteList[5] ? 'show' : ''}}" wx:if="{{favoriteList[5]}}">❤️</view>
+      </view>
+    </view>
+    
+    <!-- 第一行中间：左侧索引19，右侧索引6 -->
+    <view class="food-ring-row middle-ring">
+      <!-- 左侧格子 -->
+      <view class="food-cell sichuan {{activeIndex === 19 ? 'active' : ''}}" bindlongpress="toggleFavorite" data-index="19">
+        <text class="food-icon">🌶️</text>
+        <text class="food-name">川菜</text>
+        <text class="multiplier">×2</text>
+        <view class="favorite-heart {{favoriteList[19] ? 'show' : ''}}" wx:if="{{favoriteList[19]}}">❤️</view>
+      </view>
+      
+      <view class="ring-spacer"></view>
+      
+      <!-- 右侧格子 -->
+      <view class="food-cell hunan {{activeIndex === 6 ? 'active' : ''}}" bindlongpress="toggleFavorite" data-index="6">
+        <text class="food-icon">🥵</text>
+        <text class="food-name">湘菜</text>
+        <text class="multiplier">×2</text>
+        <view class="favorite-heart {{favoriteList[6] ? 'show' : ''}}" wx:if="{{favoriteList[6]}}">❤️</view>
+      </view>
+    </view>
+    
+    <!-- 第二行中间：左侧索引18，右侧索引7 -->
+    <view class="food-ring-row middle-ring">
+      <view class="food-cell southeast {{activeIndex === 18 ? 'active' : ''}}" bindlongpress="toggleFavorite" data-index="18">
+        <text class="food-icon">🥥</text>
+        <text class="food-name">东南亚</text>
+        <text class="multiplier">×2</text>
+        <view class="favorite-heart {{favoriteList[18] ? 'show' : ''}}" wx:if="{{favoriteList[18]}}">❤️</view>
+      </view>
+      
+      <view class="ring-spacer"></view>
+      
+      <view class="food-cell grill {{activeIndex === 7 ? 'active' : ''}}" bindlongpress="toggleFavorite" data-index="7">
+        <text class="food-icon">🍗</text>
+        <text class="food-name">烧烤</text>
+        <view class="favorite-heart {{favoriteList[7] ? 'show' : ''}}" wx:if="{{favoriteList[7]}}">❤️</view>
+      </view>
+    </view>
+    
+    <!-- 第三行中间：左侧索引17，右侧索引8 -->
+    <view class="food-ring-row middle-ring">
+      <view class="food-cell noodles {{activeIndex === 17 ? 'active' : ''}}" bindlongpress="toggleFavorite" data-index="17">
+        <text class="food-icon">🍝</text>
+        <text class="food-name">面食</text>
+        <text class="multiplier">×2</text>
+        <view class="favorite-heart {{favoriteList[17] ? 'show' : ''}}" wx:if="{{favoriteList[17]}}">❤️</view>
+      </view>
+      
+      <view class="ring-spacer"></view>
+      
+      <view class="food-cell seafood {{activeIndex === 8 ? 'active' : ''}}" bindlongpress="toggleFavorite" data-index="8">
+        <text class="food-icon">🦐</text>
+        <text class="food-name">海鲜</text>
+        <view class="favorite-heart {{favoriteList[8] ? 'show' : ''}}" wx:if="{{favoriteList[8]}}">❤️</view>
+      </view>
+    </view>
+    
+    <!-- 第四行中间：左侧索引16，右侧索引9 -->
+    <view class="food-ring-row middle-ring">
+      <view class="food-cell northeast {{activeIndex === 16 ? 'active' : ''}}" bindlongpress="toggleFavorite" data-index="16">
+        <text class="food-icon">🥟</text>
+        <text class="food-name">东北菜</text>
+        <text class="multiplier">×2</text>
+        <view class="favorite-heart {{favoriteList[16] ? 'show' : ''}}" wx:if="{{favoriteList[16]}}">❤️</view>
+      </view>
+      
+      <view class="ring-spacer"></view>
+      
+      <view class="food-cell xinjiang {{activeIndex === 9 ? 'active' : ''}}" bindlongpress="toggleFavorite" data-index="9">
+        <text class="food-icon">🍖</text>
+        <text class="food-name">新疆菜</text>
+        <view class="favorite-heart {{favoriteList[9] ? 'show' : ''}}" wx:if="{{favoriteList[9]}}">❤️</view>
+      </view>
+    </view>
+    
+    <!-- 底部一行美食格子（6个）从右到左索引 10-15 -->
+    <view class="food-ring-row bottom-ring">
+      <view class="food-cell fastfood {{activeIndex === 15 ? 'active' : ''}}" bindlongpress="toggleFavorite" data-index="15">
+        <text class="food-icon">🍔</text>
+        <text class="food-name">快餐</text>
+        <view class="favorite-heart {{favoriteList[15] ? 'show' : ''}}" wx:if="{{favoriteList[15]}}">❤️</view>
+      </view>
+      <view class="food-cell snacks {{activeIndex === 14 ? 'active' : ''}}" bindlongpress="toggleFavorite" data-index="14">
+        <text class="food-icon">🥤</text>
+        <text class="food-name">饮品</text>
+        <text class="multiplier">×2</text>
+        <view class="favorite-heart {{favoriteList[14] ? 'show' : ''}}" wx:if="{{favoriteList[14]}}">❤️</view>
+      </view>
+      <view class="food-cell vegetarian {{activeIndex === 13 ? 'active' : ''}}" bindlongpress="toggleFavorite" data-index="13">
+        <text class="food-icon">🥗</text>
+        <text class="food-name">素食</text>
+        <view class="favorite-heart {{favoriteList[13] ? 'show' : ''}}" wx:if="{{favoriteList[13]}}">❤️</view>
+      </view>
+      <view class="food-cell spicy {{activeIndex === 12 ? 'active' : ''}}" bindlongpress="toggleFavorite" data-index="12">
+        <text class="food-icon">🍜</text>
+        <text class="food-name">麻辣烫</text>
+        <view class="favorite-heart {{favoriteList[12] ? 'show' : ''}}" wx:if="{{favoriteList[12]}}">❤️</view>
+      </view>
+      <view class="food-cell buffet {{activeIndex === 11 ? 'active' : ''}}" bindlongpress="toggleFavorite" data-index="11">
+        <text class="food-icon">🍽️</text>
+        <text class="food-name">自助餐</text>
+        <view class="favorite-heart {{favoriteList[11] ? 'show' : ''}}" wx:if="{{favoriteList[11]}}">❤️</view>
+      </view>
+      <view class="food-cell western {{activeIndex === 10 ? 'active' : ''}}" bindlongpress="toggleFavorite" data-index="10">
+        <text class="food-icon">🥩</text>
+        <text class="food-name">西餐</text>
+        <text class="multiplier">×2</text>
+        <view class="favorite-heart {{favoriteList[10] ? 'show' : ''}}" wx:if="{{favoriteList[10]}}">❤️</view>
+      </view>
+    </view>
+    
+    <!-- 中央结果显示区域 - 独立定位在整个长方形中心 -->
+    <view class="center-result-area">
+      <!-- 当前选中的食物和店铺显示 -->
+      <view class="selected-food-display" wx:if="{{selectedFood}}">
+        <text class="selected-icon">{{selectedFood.icon}}</text>
+        <text class="selected-name">{{selectedFood.name}}</text>
+        <text class="selected-multiplier {{selectedFood.name === '777幸运奖' ? 'lucky' : ''}}" wx:if="{{selectedFood.multiplier}}" data-value="{{selectedFood.multiplier}}">{{selectedFood.multiplier}}</text>
+        
+        <!-- 店铺信息显示 -->
+        <view class="shop-info" wx:if="{{selectedShop}}">
+          <text class="shop-name">{{selectedShop.name}}</text>
+          <view class="shop-details">
+            <text class="shop-distance">{{selectedShop.distance}}</text>
+            <text class="shop-rating">⭐{{selectedShop.rating}}</text>
+            <text class="shop-price">{{selectedShop.price}}</text>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 默认标题区域 -->
+      <view class="title-area" wx:else>
+        <view class="title-box">
+          <text>吃啥转圈圈 之 ITC吃什么?</text>
+        </view>
+        <view class="subtitle-box">
+          <text>选择消耗1积分</text>
+        </view>
+        <view class="number-display">
+          <text>{{spinCount || 2}}</text>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 新增：自定义消息提示框 - 位于结果框下方 -->
+    <view class="custom-toast" wx:if="{{showCustomToast}}">
+      <view class="toast-content">
+        <text class="toast-message">{{toastMessage}}</text>
+      </view>
+    </view>
+    
+    <!-- 新增：中奖特效 -->
+    <view class="jackpot-effect" wx:if="{{showJackpotEffect}}">
+      <view class="jackpot-overlay">
+        <view class="jackpot-particles">
+          <view class="particle particle-1"></view>
+          <view class="particle particle-2"></view>
+          <view class="particle particle-3"></view>
+          <view class="particle particle-4"></view>
+          <view class="particle particle-5"></view>
+          <view class="particle particle-6"></view>
+          <view class="particle particle-7"></view>
+          <view class="particle particle-8"></view>
+        </view>
+        <view class="jackpot-text">
+          <text class="jackpot-title">🎰 JACKPOT! 🎰</text>
+          <text class="jackpot-subtitle">777幸运奖！</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 新增：专门的提示消息框 -->
+  <view class="tip-message-box" wx:if="{{showTipMessageBox}}">
+    <view class="tip-message-content">
+      <text class="tip-message-text">{{feedbackMessageText || '长按美食格可以加小心心哦~ ❤️'}}</text>
+    </view>
+  </view>
+  
+  <!-- 底部按钮区域 -->
+  <view class="button-area">
+    <!-- 提示按钮放在开始选择按钮左边 -->
+    <view class="tip-button-inline" bindtap="showTipMessage">
+      <text class="tip-icon">❤️</text>
+    </view>
+    <button class="spin-button" bindtap="startSpin">🎲 开始选择</button>
+    <!-- 提建议按钮放在开始选择按钮右边 -->
+    <view class="feedback-button-inline" bindtap="showFeedbackMessage">
+      <text class="feedback-icon">➕</text>
+    </view>
+  </view>
+</view>
